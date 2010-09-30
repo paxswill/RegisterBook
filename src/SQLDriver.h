@@ -9,7 +9,10 @@ Also, an XML export function may be tacked onto this as a child
 #include <sqlite3.h>
 #include <string>
 #include <set>
-#include "Transaction.h"
+
+//Forward declarations
+class Transaction;
+class User;
 
 class SQLDriver{
 public:
@@ -17,7 +20,7 @@ public:
 	virtual void close() = 0;
 	virtual bool commitTransaction(Transaction *t) = 0;
 	virtual Transaction* makeTransaction() = 0;
-	virtual user* makeUser() = 0;
+	virtual User* makeUser() = 0;
 	//Transaction access
 	virtual std::set<Transaction*> listTransactions() = 0;
 	virtual void setTransaction(Transaction *t) = 0;
