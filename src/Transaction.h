@@ -18,14 +18,17 @@ public:
 	
 	int getTransactionStamp();
 	int getTimestamp();
+	int getID();
 	SQLDriver* getDriver();
 private:
 	int userID;
+	int transactionID;
 	double amount;
 	time_t transactionStamp;
 	time_t timestamp;
 	SQLDriver *driver;
 	bool locked;
+	friend class SQLDriver;
 };
 
 #endif
