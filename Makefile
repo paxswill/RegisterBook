@@ -23,10 +23,16 @@ endif
 SYS_CFLAGS = $(MINGW_CFLAGS) $(OSX_CFLAGS)
 SYS_LDFLAGS = $(MINGW_LDFLAGS) $(OSX_LDFLAGS)
 
-all: sqlite
+#Compiler flags
+SELF_CFLAGS = -g -O0 -Wall $(CFLAGS)
+
+all: sqlite transaction
 
 sqlite:
 ifeq ($(UNAME),MINGW32_NT-5.1)
 	$(MAKE) ../sqlite/Makefile
 endif
+
+transaction:
+	g++ $(SELF_CFLAGS) $(SYS_CFLAGS) -c -I./src/ ./src/Transaction.cpp -o ./bin/Transaction.o
 
