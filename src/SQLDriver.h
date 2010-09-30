@@ -10,6 +10,8 @@ Also, an XML export function may be tacked onto this as a child
 #include <string>
 #include <set>
 
+#include "UserNotFoundException.h"
+
 //Forward declarations
 class Transaction;
 class User;
@@ -29,6 +31,9 @@ public:
 	virtual std::set<User*> listUsers() = 0;
 	virtual void setUser(User *u) = 0;
 	virtual int countUsers() = 0;
+	virtual User* getUser(std::string name) throw (UserNotFoundException) = 0;
+	virtual User* getUser(int userID) = 0;
+	
 };
 
 #endif

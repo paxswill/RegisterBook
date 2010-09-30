@@ -1,4 +1,6 @@
 #include <Transaction.h>
+#include "User.h"
+#include "UserNotFoundException.h"
 
 Transaction::Transaction(){
 	driver = NULL;
@@ -14,14 +16,14 @@ Transaction::Transaction(SQLDriver *driver){
 
 }
 
-Transaction::Transaction(SQLDriver *d, std::string name, double a){
+Transaction::Transaction(SQLDriver *d, std::string name, double a) throw (UserNotFoundException){
 	driver = d;
-	User *user  = d->getUser(name);
-	if(user){
+	User *user; 
+	try{
+		user = d->getUser(name);
 		userID = user->getID();
-		
-	}else{
-		return NULL;
+	}catch(UserNotFoundException e){
+		fprintf(stderr, "Exception: %s", e.what());
 	}
 }
 

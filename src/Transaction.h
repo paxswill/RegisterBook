@@ -4,11 +4,13 @@
 #include <string>
 #include <time.h>
 #include "SQLDriver.h"
+
+
 class Transaction{
 public:
 	Transaction();
 	Transaction(SQLDriver *driver);
-	Transaction(SQLDriver *driver, std::string name, double amount);
+	Transaction(SQLDriver *driver, std::string name, double amount) throw (UserNotFoundException);
 	~Transaction();
 	
 	int getUserID();
