@@ -9,7 +9,7 @@ class User{
 public:
 	User();
 	User(SQLDriver *d);
-	User(std:string n, int i, time_t t, SQLDriver *d);
+	User(std::string n, int i, time_t t, SQLDriver *d);
 	~User();
 	
 	std::string getName();
@@ -28,4 +28,4 @@ private:
 };
 
 
-#ifndef
+#endif
