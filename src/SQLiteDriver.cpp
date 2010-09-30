@@ -1,7 +1,9 @@
 #include "SQLiteDriver.h"
 
 void SQLiteDriver::open(std::string name){
-	
+	//Open a database file, creating if needed
+	int status;
+	status = sqlite3_open_v2(name.c_str(), &db, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, NULL);
 }
 
 void SQLiteDriver::close(){
