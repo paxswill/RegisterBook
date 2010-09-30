@@ -26,13 +26,16 @@ SYS_LDFLAGS = $(MINGW_LDFLAGS) $(OSX_LDFLAGS)
 #Compiler flags
 SELF_CFLAGS = -g -O0 -Wall $(CFLAGS)
 
-all: sqlite transaction
+all: sqlite3 transaction sqlite
 
-sqlite:
+sqlite3:
 ifeq ($(UNAME),MINGW32_NT-5.1)
 	$(MAKE) ../sqlite/Makefile
 endif
 
 transaction:
 	g++ $(SELF_CFLAGS) $(SYS_CFLAGS) -c -I./src/ ./src/Transaction.cpp -o ./bin/Transaction.o
+
+sqlite:
+	g++ $(SELF_CFLAGS) $(SYS_CFLAGS) -c -I./src/ ./src/SQLiteDriver.cpp -o ./bin/SQLiteDriver.o
 
