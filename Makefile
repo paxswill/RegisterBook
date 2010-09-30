@@ -15,6 +15,8 @@ endif
 ifeq ($(UNAME),Darwin)
 	OSX_CFLAGS = 
 	OSX_LDFLAGS =
+	CC=clang
+	CXX=clang
 else
 	OSX_CFLAGS = 
 	OSX_LDFLAGS =
@@ -26,7 +28,13 @@ SYS_LDFLAGS = $(MINGW_LDFLAGS) $(OSX_LDFLAGS)
 #Compiler flags
 SELF_CFLAGS = -g -O0 -Wall $(CFLAGS)
 
+# Prefer clang on OS X
+
+
 all: sqlite3 transaction sqlite
+
+clean:
+	rm -rf ./bin/*
 
 sqlite3:
 ifeq ($(UNAME),MINGW32_NT-5.1)
