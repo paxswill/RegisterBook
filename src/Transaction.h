@@ -28,6 +28,8 @@ private:
 	double amount;
 	time_t transactionStamp;
 	time_t timestamp;
+	std::string title;
+	std::string comment;
 	SQLDriver *driver;
 	bool locked;
 	friend class SQLDriver;

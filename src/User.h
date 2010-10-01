@@ -23,6 +23,7 @@ private:
 	std::string name;
 	int id;
 	time_t stamp;
+	std::string comment;
 	SQLDriver *driver;
 	friend class SQLDriver;
 };
