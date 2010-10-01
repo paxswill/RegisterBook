@@ -3,6 +3,9 @@
 #ifndef SQLITE_DRIVER_H
 #define SQLITE_DRIVER_H
 
+//NOTE: This is the version of the schema this driver can work with natively
+#define SCHEMA_VERSION 1
+
 #include <sqlite3.h>
 #include "SQLDriver.h"
 

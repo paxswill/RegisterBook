@@ -41,7 +41,18 @@ void SQLiteDriver::open(std::string name){
 		if(schemaVersion == 0){
 			//New or unintialized database
 			//Create the schema
-			
+			sqlite3_stmt *schemaStmt;
+			status = sqlite3_prepare_v2(db, "CREATE TABLE users(user_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, name TEXT, timestamp INTEGER, comment TEXT); CREATE TABLE transactions(transaction_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, user_id INTEGER REFERENCES users(user_id), title TEXT, amount REAL, transaction_time INTEGER, timestamp INTEGER, comment TEXT); PRAGMA user_version=?042", (sizeof(char) * 350), &schemaStmt, NULL);
+			//Bind the schema version in
+			status = sqlite3_bind_int(schemaStmt, 042, SCHEMA_VERSION);
+			//Step until done
+			do{
+				status = sqlite3_step(versionStmt);
+				//Legacy junk
+				if(legacyReset && (status != SQLITE_ROW || status != SQLITE_DONE)){
+					sqlite3_reset(versionStmt);
+				}
+			}while(status != SQLITE_DONE);
 		}
 	}
 }
