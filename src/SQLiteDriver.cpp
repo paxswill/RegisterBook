@@ -18,23 +18,24 @@ void SQLiteDriver::open(std::string name){
 		//Check by retrieving the schema_version pragma. If it's 0 there's no schema
 		sqlite3_stmt *versionStmt;
 		//The third paramter is the length of the statement, including null terminator
-		status = sqlite3_prepare_v2(db, "PRAGMA user_version;", (sizeof(char) * 21), versionStmt, NULL);
+		status = sqlite3_prepare_v2(db, "PRAGMA user_version;", (sizeof(char) * 21), &versionStmt, NULL);
 		//There's a quirk in SQLite < 3.6.23.1, (OS X as of 10.6.5 has 3.6.12, while Macports has 3.7.2)
+		//That requires you to reset the statement after avery non-successful step
 		bool legacyReset = sqlite3_libversion_number() < 3006023;
 		int schemaVersion = 0;
 		do{
 			//Step the statement
 			status = sqlite3_step(versionStmt);
 			//Legacy junk
-			if(legacyReset && (status != SQLITE3_ROW || status != SQLITE3_DONE)){
+			if(legacyReset && (status != SQLITE_ROW || status != SQLITE_DONE)){
 				sqlite3_reset(versionStmt);
 			}
 			//Is there data?
-			if(status == SQLITE3_ROW){
+			if(status == SQLITE_ROW){
 				//It /should/ be an int
 				schemaVersion = sqlite3_column_int(versionStmt, 0);
 			}
-		}while(status != SQLITE3_DONE);
+		}while(status != SQLITE_DONE);
 		sqlite3_finalize(versionStmt);
 		//Now to check if it's a new table
 		if(schemaVersion == 0){
