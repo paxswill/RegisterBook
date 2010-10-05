@@ -1,4 +1,6 @@
 #include "SQLiteDriver.h"
+#include "Transaction.h"
+#include "User.h"
 
 void SQLiteDriver::open(std::string name){
 	//Open a database file, creating if needed
@@ -66,16 +68,48 @@ bool SQLiteDriver::commitTransaction(Transaction *t){
 }
 
 Transaction* SQLiteDriver::makeTransaction(){
-	
+	return new Transaction(this);
 }
 
 User* SQLiteDriver::makeUser(){
-	
+	return new User(this);
 }
 
 //Transaction access
 std::set<Transaction*> SQLiteDriver::listTransactions(){
-	
+	//Start building the statement
+	sqlite3_stmt *transactionsStmt;
+	int status = sqlite3_prepare_v2(db, "SELECT transaction_id, user_id, title, amount, transaction_time, timestamp, comment FROM transactions;", (sizeof(char) * 104), &transactionsStmt, NULL);
+	//Legacy quirk detection (see above)
+	bool legacyReset = sqlite3_libversion_number() < 3006023;
+	//Where we're putting transactions
+	std::set<Transaction*> transactions;
+	do{
+		//Step the statement
+		status = sqlite3_step(transactionsStmt);
+		//Legacy junk
+		if(legacyReset && (status != SQLITE_ROW || status != SQLITE_DONE)){
+			sqlite3_reset(transactionsStmt);
+		}
+		//Is there data?
+		if(status == SQLITE_ROW){
+			//Make a transaction
+			Transaction *temp = new Transaction(this);
+			//Fill it in
+			temp->locked = true;
+			temp->transactionID = sqlite3_column_int(transactionsStmt, 0);
+			temp->userID = sqlite3_column_int(transactionsStmt, 1);
+			temp->title = (const char*)sqlite3_column_text(transactionsStmt, 2);
+			temp->amount = sqlite3_column_double(transactionsStmt, 3);
+			temp->transactionStamp = sqlite3_column_int(transactionsStmt, 4);
+			temp->timestamp = sqlite3_column_int(transactionsStmt, 5);
+			temp->comment = (const char*)sqlite3_column_text(transactionsStmt, 6);
+			//Add it to te set
+			transactions.insert(temp);
+		}
+	}while(status != SQLITE_DONE);
+	sqlite3_finalize(transactionsStmt);
+	return transactions;
 }
 
 void SQLiteDriver::setTransaction(Transaction *t){
