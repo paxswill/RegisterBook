@@ -20,6 +20,8 @@ ifeq ($(UNAME),Darwin)
 else
 	OSX_CFLAGS = 
 	OSX_LDFLAGS =
+	CC=gcc
+	CXX=g++
 endif
 
 SYS_CFLAGS = $(MINGW_CFLAGS) $(OSX_CFLAGS)
@@ -42,8 +44,8 @@ ifeq ($(UNAME),MINGW32_NT-5.1)
 endif
 
 transaction:
-	g++ $(SELF_CFLAGS) $(SYS_CFLAGS) -c -I./src/ ./src/Transaction.cpp -o ./bin/Transaction.o
+	$(CXX) $(SELF_CFLAGS) $(SYS_CFLAGS) -c -I./src/ ./src/Transaction.cpp -o ./bin/Transaction.o
 
 sqlite:
-	g++ $(SELF_CFLAGS) $(SYS_CFLAGS) -c -I./src/ ./src/SQLiteDriver.cpp -o ./bin/SQLiteDriver.o
+	$(CXX) $(SELF_CFLAGS) $(SYS_CFLAGS) -c -I./src/ ./src/SQLiteDriver.cpp -o ./bin/SQLiteDriver.o
 
