@@ -60,7 +60,16 @@ void SQLiteDriver::open(std::string name){
 }
 
 void SQLiteDriver::close(){
-	
+	//Commit
+	char *errorMessage;
+	int status = sqlite3_exec(db, "COMMIT;", NULL, NULL, &errorMessage);
+	status = sqlite3_close(db);
+	if(status == SQLITE_OK){
+		//Yay, closed
+	}else{
+		//Aw hell, DB not closed yet.
+		fprintf(stderr, "%s", errorMessage);
+	}
 }
 
 bool SQLiteDriver::commitTransaction(Transaction *t){
