@@ -22,6 +22,7 @@ public:
 	int getTimestamp();
 	int getID();
 	SQLDriver* getDriver();
+	friend class SQLiteDriver;
 private:
 	int userID;
 	int transactionID;
@@ -32,7 +33,6 @@ private:
 	std::string comment;
 	SQLDriver *driver;
 	bool locked;
-	friend class SQLDriver;
 };
 
 #endif
