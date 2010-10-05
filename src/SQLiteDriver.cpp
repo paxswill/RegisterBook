@@ -18,7 +18,7 @@ void SQLiteDriver::open(std::string name){
 		//Check by retrieving the schema_version pragma. If it's 0 there's no schema
 		sqlite3_stmt *versionStmt;
 		//The third paramter is the length of the statement, including null terminator
-		status = sqlite3_prepare_v2(db, "PRAGMA user_version;", (sizeof(char) * 21), &versionStmt, NULL);
+		status = sqlite3_prepare_v2(db, "PRAGMA schema_version;", (sizeof(char) * 21), &versionStmt, NULL);
 		//There's a quirk in SQLite < 3.6.23.1, (OS X as of 10.6.5 has 3.6.12, while Macports has 3.7.2)
 		//That requires you to reset the statement after avery non-successful step
 		bool legacyReset = sqlite3_libversion_number() < 3006023;
