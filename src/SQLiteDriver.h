@@ -28,6 +28,7 @@ public:
 	virtual User* getUser(int userID);
 private:
 	sqlite3 *db;
+	sqlite3_stmt *checkTransactionStmt;
 	sqlite3_stmt *updateTransactionStmt;
 	//Utility functions
 	static int bind(sqlite3_stmt *stmt, const char *var_name, int var);
