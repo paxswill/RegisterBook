@@ -197,3 +197,25 @@ User* SQLiteDriver::getUser(std::string name) throw (UserNotFoundException){
 User* SQLiteDriver::getUser(int userID){
 	
 }
+
+//Private Utility methods
+
+/*
+	The bind() methods hide the SQLite3 C API for binding away.
+	The evils parts of it are the non-overloading (which we have in C++),
+	not binding on placeholder names, and the obtuse way of binding strings.
+*/
+int SQLiteDriver::bind(sqlite3_stmt *stmt, const char *var_name, int var){
+	int parameterIndex = sqlite3_bind_parameter_index(stmt, var_name);
+	return sqlite3_bind_int(stmt, parameterIndex, var);
+}
+
+int SQLiteDriver::bind(sqlite3_stmt *stmt, const char *var_name, double var){
+	int parameterIndex = sqlite3_bind_parameter_index(stmt, var_name);
+	return sqlite3_bind_double(stmt, parameterIndex, var);
+}
+
+int SQLiteDriver::bind(sqlite3_stmt *stmt, const char *var_name, std::string var){
+	int parameterIndex = sqlite3_bind_parameter_index(stmt, var_name);
+	return sqlite3_bind_text(stmt, parameterIndex, var.c_str(), (var.size() + 1) * sizeof(char), SQLITE_TRANSIENT);
+}

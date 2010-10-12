@@ -29,7 +29,10 @@ public:
 private:
 	sqlite3 *db;
 	sqlite3_stmt *updateTransactionStmt;
-	
+	//Utility functions
+	static int bind(sqlite3_stmt *stmt, const char *var_name, int var);
+	static int bind(sqlite3_stmt *stmt, const char *var_name, double var);
+	static int bind(sqlite3_stmt *stmt, const char *var_name, std::string var);
 };
 
 #endif
