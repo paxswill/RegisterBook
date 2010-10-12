@@ -44,7 +44,7 @@ ifeq ($(UNAME),MINGW32_NT-5.1)
 endif
 
 transaction:
-	$(CXX) $(SELF_CFLAGS) $(SYS_CFLAGS) -c -I./src/ ./src/Transaction.cpp -o ./bin/Transaction.o
+	$(CXX) $(SELF_CFLAGS) $(SYS_CFLAGS) -c -I./src/ -I../sqlite/ ./src/Transaction.cpp -o ./bin/Transaction.o
 
 sqlite:
 	$(CXX) $(SELF_CFLAGS) $(SYS_CFLAGS) -c -I./src/ ./src/SQLiteDriver.cpp -o ./bin/SQLiteDriver.o

@@ -21,17 +21,10 @@ void SQLiteDriver::open(std::string name){
 		sqlite3_stmt *versionStmt;
 		//The third paramter is the length of the statement, including null terminator
 		status = sqlite3_prepare_v2(db, "PRAGMA schema_version;", (sizeof(char) * 21), &versionStmt, NULL);
-		//There's a quirk in SQLite < 3.6.23.1, (OS X as of 10.6.5 has 3.6.12, while Macports has 3.7.2)
-		//That requires you to reset the statement after avery non-successful step
-		bool legacyReset = sqlite3_libversion_number() < 3006023;
 		int schemaVersion = 0;
 		do{
 			//Step the statement
 			status = sqlite3_step(versionStmt);
-			//Legacy junk
-			if(legacyReset && (status != SQLITE_ROW || status != SQLITE_DONE)){
-				sqlite3_reset(versionStmt);
-			}
 			//Is there data?
 			if(status == SQLITE_ROW){
 				//It /should/ be an int
@@ -50,10 +43,6 @@ void SQLiteDriver::open(std::string name){
 			//Step until done
 			do{
 				status = sqlite3_step(versionStmt);
-				//Legacy junk
-				if(legacyReset && (status != SQLITE_ROW || status != SQLITE_DONE)){
-					sqlite3_reset(versionStmt);
-				}
 			}while(status != SQLITE_DONE);
 		}
 	}
@@ -89,17 +78,11 @@ std::set<Transaction*> SQLiteDriver::listTransactions(){
 	//Start building the statement
 	sqlite3_stmt *transactionsStmt;
 	int status = sqlite3_prepare_v2(db, "SELECT transaction_id, user_id, title, amount, transaction_time, timestamp, comment FROM transactions;", (sizeof(char) * 104), &transactionsStmt, NULL);
-	//Legacy quirk detection (see above)
-	bool legacyReset = sqlite3_libversion_number() < 3006023;
 	//Where we're putting transactions
 	std::set<Transaction*> transactions;
 	do{
 		//Step the statement
 		status = sqlite3_step(transactionsStmt);
-		//Legacy junk
-		if(legacyReset && (status != SQLITE_ROW || status != SQLITE_DONE)){
-			sqlite3_reset(transactionsStmt);
-		}
 		//Is there data?
 		if(status == SQLITE_ROW){
 			//Make a transaction
