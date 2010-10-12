@@ -40,8 +40,8 @@ sqlite3:
 	$(CC) $(SELF_CFLAGS) $(SYS_CFLAGS) -c -I./sqlite3/ ./sqlite3/sqlite3.c -o ./bin/sqlite3.o
 
 transaction:
-	$(CXX) $(SELF_CFLAGS) $(SYS_CFLAGS) -c -I./src/ -I./sqlite/ ./src/Transaction.cpp -o ./bin/Transaction.o
+	$(CXX) $(SELF_CFLAGS) $(SYS_CFLAGS) -c -I./src/ -I./sqlite3/ ./src/Transaction.cpp -o ./bin/Transaction.o
 
 sqlite:
-	$(CXX) $(SELF_CFLAGS) $(SYS_CFLAGS) -c -I./src/ ./src/SQLiteDriver.cpp -o ./bin/SQLiteDriver.o
+	$(CXX) $(SELF_CFLAGS) $(SYS_CFLAGS) -c -I./src/ -I./sqlite3/ ./src/SQLiteDriver.cpp -o ./bin/SQLiteDriver.o
 
