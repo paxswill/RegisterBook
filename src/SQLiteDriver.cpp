@@ -47,14 +47,23 @@ void SQLiteDriver::open(std::string name){
 			do{
 				status = sqlite3_step(versionStmt);
 			}while(status != SQLITE_DONE);
+			//close out the statement
+			sqlite3_finalize(schemaStmt);
 		}
+		//Buid the common statements
+		status = sqlite3_prepare_v2(db, "UPDATE transactions SET user_id=?001, title=?002, amount=?003, transaction_time=?004, timestamp=?005, comment=?006 WHERE transaction_id=?007;", -1, &updateTransactionStmt, NULL);
 	}
 }
 
 void SQLiteDriver::close(){
-	//Commit
 	char *errorMessage;
-	int status = sqlite3_exec(db, "COMMIT;", NULL, NULL, &errorMessage);
+	int status;
+	//Commit
+	status = sqlite3_exec(db, "COMMIT;", NULL, NULL, &errorMessage);
+	//Finalize the common statements
+	sqlite3_finalize(updateTransactionStmt);
+	
+	//Close the DB
 	status = sqlite3_close(db);
 	if(status == SQLITE_OK){
 		//Yay, closed
@@ -64,8 +73,30 @@ void SQLiteDriver::close(){
 	}
 }
 
-bool SQLiteDriver::commitTransaction(Transaction *t){
-	
+bool SQLiteDriver::saveTransaction(Transaction *t){
+	//Assume the transaction exists aleady
+	//Bind the parameters
+	int status;
+	status = sqlite3_bind_int(updateTransactionStmt, 1, t->userID);
+	/*
+	Binding text is a PITA. from the third argument: 
+	C string
+	Size in bytes of the C string including null terminator
+	Special destructor value that says this value is transient, copy it before you use it.
+	*/
+	status = sqlite3_bind_text(updateTransactionStmt, 2, t->title.c_str(), (t->title.size() + 1) * sizeof(char), SQLITE_TRANSIENT);
+	status = sqlite3_bind_double(updateTransactionStmt, 3, t->amount);
+	status = sqlite3_bind_int(updateTransactionStmt, 4, t->transactionStamp);
+	status = sqlite3_bind_int(updateTransactionStmt, 5, (int)time(NULL));
+	status = sqlite3_bind_text(updateTransactionStmt, 6, t->comment.c_str(), (t->comment.size() + 1) * sizeof(char), SQLITE_TRANSIENT);
+	//Bind the transaction ID. This is important.
+	status = sqlite3_bind_int(updateTransactionStmt, 7, t->transactionID);
+	//Binding done. Now to run the statement
+	do{
+		status = sqlite3_step(versionStmt);
+	}while(status != SQLITE_DONE);
+	//Reset the stement
+	status = sqlite3-reset(updateTransactionStmt);
 }
 
 Transaction* SQLiteDriver::makeTransaction(){
@@ -99,7 +130,7 @@ std::set<Transaction*> SQLiteDriver::listTransactions(){
 			temp->transactionStamp = sqlite3_column_int(transactionsStmt, 4);
 			temp->timestamp = sqlite3_column_int(transactionsStmt, 5);
 			temp->comment = (const char*)sqlite3_column_text(transactionsStmt, 6);
-			//Add it to te set
+			//Add it to the set
 			transactions.insert(temp);
 		}
 	}while(status != SQLITE_DONE);
@@ -117,7 +148,29 @@ int SQLiteDriver::countTransactions(){
 
 //User Access
 std::set<User*> SQLiteDriver::listUsers(){
-	
+	//Start building the statement
+	sqlite3_stmt *userStmt;
+	int status = sqlite3_prepare_v2(db, "SELECT user_id, name, timestamp, comment FROM users;", (sizeof(char) * 53), &userStmt, NULL);
+	//Where we're putting users
+	std::set<User*> users;
+	do{
+		//Step the statement
+		status = sqlite3_step(userStmt);
+		//Is there data?
+		if(status == SQLITE_ROW){
+			//Make a user
+			User *temp = new User(this);
+			//Fill it in
+			temp->id = sqlite3_column_int(userStmt, 0);
+			temp->name = (const char*)sqlite3_column_text(userStmt, 1);
+			temp->timestamp = sqlite3_column_int(userStmt, 2);
+			temp->comment = (const char*)sqlite3_column_text(userStmt, 3);
+			//Add it to the set
+			users.insert(temp);
+		}
+	}while(status != SQLITE_DONE);
+	sqlite3_finalize(userStmt);
+	return users;
 }
 
 void SQLiteDriver::setUser(User *u){

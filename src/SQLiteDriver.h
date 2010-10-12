@@ -28,6 +28,8 @@ public:
 	virtual User* getUser(int userID);
 private:
 	sqlite3 *db;
+	sqlite3_stmt *updateTransactionStmt;
+	
 };
 
 #endif

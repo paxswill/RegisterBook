@@ -20,7 +20,7 @@ class SQLDriver{
 public:
 	virtual void open(std::string name) = 0;
 	virtual void close() = 0;
-	virtual bool commitTransaction(Transaction *t) = 0;
+	virtual bool saveTransaction(Transaction *t) = 0;
 	virtual Transaction* makeTransaction() = 0;
 	virtual User* makeUser() = 0;
 	//Transaction access
