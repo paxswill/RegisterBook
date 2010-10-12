@@ -19,13 +19,14 @@ public:
 	
 	time_t getStamp();
 	SQLDriver* getDriver();
+	friend class SQLiteDriver;
 private:
 	std::string name;
 	int id;
-	time_t stamp;
+	time_t timestamp;
 	std::string comment;
 	SQLDriver *driver;
-	friend class SQLDriver;
+	
 };
 
 
