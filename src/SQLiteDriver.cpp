@@ -218,5 +218,9 @@ int SQLiteDriver::bind(sqlite3_stmt *stmt, const char *var_name, double var){
 
 int SQLiteDriver::bind(sqlite3_stmt *stmt, const char *var_name, std::string var){
 	int parameterIndex = sqlite3_bind_parameter_index(stmt, var_name);
+	//There's some evil here, so here's an explanation
+	//Args 1 and 2 are simple enough, 3 is a C string, 4 is the size in bytes of the string,
+	// and 5 is a special value saying that the string passed may change in the future
+	// (which it does, std::string.c_str() returns an internal representation that changes)
 	return sqlite3_bind_text(stmt, parameterIndex, var.c_str(), (var.size() + 1) * sizeof(char), SQLITE_TRANSIENT);
 }
