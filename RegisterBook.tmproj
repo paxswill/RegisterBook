@@ -10,7 +10,7 @@
 			<key>filename</key>
 			<string>Makefile</string>
 			<key>lastUsed</key>
-			<date>2010-09-30T22:03:16Z</date>
+			<date>2010-10-05T09:32:23Z</date>
 		</dict>
 		<dict>
 			<key>expanded</key>
@@ -32,9 +32,9 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>15</integer>
+				<integer>31</integer>
 				<key>line</key>
-				<integer>36</integer>
+				<integer>35</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -60,14 +60,14 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>15</integer>
+				<integer>1</integer>
 				<key>line</key>
-				<integer>65</integer>
+				<integer>121</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
+			<integer>124</integer>
 		</dict>
 		<key>src/SQLiteDriver.h</key>
 		<dict>
@@ -102,9 +102,9 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>21</integer>
+				<integer>27</integer>
 				<key>line</key>
-				<integer>31</integer>
+				<integer>24</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -132,7 +132,7 @@
 				<key>column</key>
 				<integer>0</integer>
 				<key>line</key>
-				<integer>0</integer>
+				<integer>4</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
