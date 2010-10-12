@@ -5,6 +5,7 @@
 void SQLiteDriver::open(std::string name){
 	//Open a database file, creating if needed
 	int status;
+	char *errorMessage;
 	status = sqlite3_open_v2(name.c_str(), &db, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, NULL);
 	if(status != SQLITE_OK){
 		//There was an error opening the DB
@@ -16,6 +17,8 @@ void SQLiteDriver::open(std::string name){
 		//DB opened successfully
 		//Turn on extended error codes
 		sqlite3_extended_result_codes(db, 1);
+		//Turn on foreign key support
+		status = sqlite3_exec(db, "PRAGMA foreign_keys = ON;", NULL, NULL, &errorMessage);
 		//Is this a new database, or an old one?
 		//Check by retrieving the schema_version pragma. If it's 0 there's no schema
 		sqlite3_stmt *versionStmt;
@@ -37,7 +40,7 @@ void SQLiteDriver::open(std::string name){
 			//New or unintialized database
 			//Create the schema
 			sqlite3_stmt *schemaStmt;
-			status = sqlite3_prepare_v2(db, "CREATE TABLE users(user_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, name TEXT, timestamp INTEGER, comment TEXT); CREATE TABLE transactions(transaction_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, user_id INTEGER REFERENCES users(user_id), title TEXT, amount REAL, transaction_time INTEGER, timestamp INTEGER, comment TEXT); PRAGMA user_version=?042", (sizeof(char) * 350), &schemaStmt, NULL);
+			status = sqlite3_prepare_v2(db, "CREATE TABLE users(user_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, name TEXT, timestamp INTEGER, comment TEXT); CREATE TABLE transactions(transaction_id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE, FOREIGN KEY(user) REFERENCES users(user_id) NOT NULL, title TEXT, amount REAL, transaction_time INTEGER, timestamp INTEGER, comment TEXT); PRAGMA user_version=?042", (sizeof(char) * 350), &schemaStmt, NULL);
 			//Bind the schema version in
 			status = sqlite3_bind_int(schemaStmt, 042, SCHEMA_VERSION);
 			//Step until done
