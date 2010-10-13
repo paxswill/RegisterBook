@@ -3,14 +3,16 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>src/SQLiteDriver.cpp</string>
+	<string>Makefile</string>
 	<key>documents</key>
 	<array>
 		<dict>
 			<key>filename</key>
 			<string>Makefile</string>
 			<key>lastUsed</key>
-			<date>2010-10-05T09:32:23Z</date>
+			<date>2010-10-13T04:42:19Z</date>
+			<key>selected</key>
+			<true/>
 		</dict>
 		<dict>
 			<key>expanded</key>
@@ -32,23 +34,9 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>31</integer>
+				<integer>10</integer>
 				<key>line</key>
-				<integer>35</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>src/SQLDriver.h</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>0</integer>
+				<integer>19</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -143,7 +131,6 @@
 	<key>openDocuments</key>
 	<array>
 		<string>Makefile</string>
-		<string>src/SQLDriver.h</string>
 		<string>src/SQLiteDriver.h</string>
 		<string>src/SQLiteDriver.cpp</string>
 		<string>src/Transaction.h</string>

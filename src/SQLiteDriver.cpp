@@ -74,33 +74,6 @@ void SQLiteDriver::close(){
 	}
 }
 
-bool SQLiteDriver::saveTransaction(Transaction *t){
-	int status;
-	int parameterIndex;
-	sqlite3_stmt *workingStatment;
-	//Check to see if the statement exists
-	workingStatment = checkTransactionStmt;
-	parameterIndex = sqlite3_bind_parameter_index(workingStatment, "label_transaction_id");
-	
-	//Bind the parameters
-	status = bind(workingStatment, "label_user_id", t->userID);
-	status = bind(workingStatment, "label_title", t->title);
-	status = bind(workingStatment, "label_amount", t->amount);
-	status = bind(workingStatment, "label_transaction_time", (int)t->transactionStamp);
-	status = bind(workingStatment, "label_timestamp", (int)time(NULL));
-	status = bind(workingStatment, "label_comment", t->comment);
-	status = bind(workingStatment, "label_transaction_id", t->transactionID);
-	
-	//Binding done. Now to run the statement
-	do{
-		status = sqlite3_step(workingStatment);
-	}while(status != SQLITE_DONE);
-	//Reset the stement
-	status = sqlite3_reset(updateTransactionStmt);
-	//TODO: actually return meaningful data
-	return true;
-}
-
 Transaction* SQLiteDriver::makeTransaction(){
 	return new Transaction(this);
 }
@@ -141,7 +114,30 @@ std::set<Transaction*> SQLiteDriver::listTransactions(){
 }
 
 void SQLiteDriver::setTransaction(Transaction *t){
+	int status;
+	int parameterIndex;
+	sqlite3_stmt *workingStatment;
+	//Check to see if the statement exists
+	workingStatment = checkTransactionStmt;
+	parameterIndex = sqlite3_bind_parameter_index(workingStatment, "label_transaction_id");
 	
+	//Bind the parameters
+	status = bind(workingStatment, "label_user_id", t->userID);
+	status = bind(workingStatment, "label_title", t->title);
+	status = bind(workingStatment, "label_amount", t->amount);
+	status = bind(workingStatment, "label_transaction_time", (int)t->transactionStamp);
+	status = bind(workingStatment, "label_timestamp", (int)time(NULL));
+	status = bind(workingStatment, "label_comment", t->comment);
+	status = bind(workingStatment, "label_transaction_id", t->transactionID);
+	
+	//Binding done. Now to run the statement
+	do{
+		status = sqlite3_step(workingStatment);
+	}while(status != SQLITE_DONE);
+	//Reset the stement
+	status = sqlite3_reset(updateTransactionStmt);
+	//TODO: actually return meaningful data
+	return true;
 }
 
 int SQLiteDriver::countTransactions(){

@@ -13,7 +13,6 @@ class SQLiteDriver : public SQLDriver{
 public:
 	virtual void open(std::string name);
 	virtual void close();
-	virtual bool saveTransaction(Transaction *t);
 	virtual Transaction* makeTransaction();
 	virtual User* makeUser();
 	//Transaction access
