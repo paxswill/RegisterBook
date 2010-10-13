@@ -33,6 +33,7 @@ private:
 	static int bind(sqlite3_stmt *stmt, const char *var_name, int var);
 	static int bind(sqlite3_stmt *stmt, const char *var_name, double var);
 	static int bind(sqlite3_stmt *stmt, const char *var_name, std::string var);
+	bool checkError(int status);
 };
 
 #endif

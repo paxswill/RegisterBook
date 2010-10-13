@@ -212,3 +212,16 @@ int SQLiteDriver::bind(sqlite3_stmt *stmt, const char *var_name, std::string var
 	// (which it does, std::string.c_str() returns an internal representation that changes)
 	return sqlite3_bind_text(stmt, parameterIndex, var.c_str(), (var.size() + 1) * sizeof(char), SQLITE_TRANSIENT);
 }
+
+//Easy way to check error codes
+//true for everything alright, false for bad things
+bool SQLiteDriver::checkError(int status){
+	if(status == SQLITE_OK || status == SQLITE_DONE){
+		return true;
+	}else{
+		//Get the error message and log it
+		fprintf(stderr, "%s", sqlite3_errmsg(db));
+		return false;
+	}
+}
+
