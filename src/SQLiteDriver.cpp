@@ -53,6 +53,7 @@ void SQLiteDriver::open(std::string name){
 		//Buid the common statements
 		status = sqlite3_prepare_v2(db, "UPDATE transactions SET user_id=@label_user_id, title=@label_title, amount=@label_amount, transaction_time=@label_transaction_time, timestamp=@label_timestamp, comment=@label_comment WHERE transaction_id=@label_transaction_id;", -1, &updateTransactionStmt, NULL);
 		status = sqlite3_prepare_v2(db, "SELECT transaction_id FROM TRANSACTIONS WHERE transaction_id=@label_transaction_id LIMIT 1;", -1, &checkTransactionStmt, NULL);
+		status = sqlite3_prepare_v2(db, "INSERT INTO transactions(transaction_id, user, title, amount, transaction_time, timestamp, comment) VALUES (@label_transaction_id, @label_user_id, @label_title, @label_amount, @label_transaction_time, @label_timestamp, @label_comment);", -1, &insertTransactionStmt, NULL);
 	}
 }
 
@@ -129,9 +130,16 @@ void SQLiteDriver::setTransaction(Transaction *t){
 		int tempCheck = sqlite3_column_int(workingStatment, 0);
 		checkValue = tempCheck > checkValue ? tempCheck : checkValue;
 	}while(status != SQLITE_DONE);
-	
 	//Reset the statement
 	status = sqlite3_reset(workingStatment);
+	//Are we updating or inserting?
+	if(checkValue == -1){
+		//Inserting
+		workingStatment = insertTransactionStmt;
+	}else{
+		//Updating
+		workingStatment = updateTransactionStmt;
+	}
 	//Bind the parameters
 	status = bind(workingStatment, "label_user_id", t->userID);
 	status = bind(workingStatment, "label_title", t->title);
