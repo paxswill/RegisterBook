@@ -115,19 +115,23 @@ std::set<Transaction*> SQLiteDriver::listTransactions(){
 
 void SQLiteDriver::setTransaction(Transaction *t){
 	int status;
-	int parameterIndex;
 	sqlite3_stmt *workingStatment;
 	//Check to see if the statement exists
 	workingStatment = checkTransactionStmt;
 	status = bind(workingStatment, "label_transaction_id", t->transactionID);
 	//Run the statement
+	int checkValue = -1;
 	do{
 		status = sqlite3_step(workingStatment);
 		if(!checkError(status)){
 			break;
 		}
+		int tempCheck = sqlite3_column_int(workingStatment, 0);
+		checkValue = tempCheck > checkValue ? tempCheck : checkValue;
 	}while(status != SQLITE_DONE);
 	
+	//Reset the statement
+	status = sqlite3_reset(workingStatment);
 	//Bind the parameters
 	status = bind(workingStatment, "label_user_id", t->userID);
 	status = bind(workingStatment, "label_title", t->title);
