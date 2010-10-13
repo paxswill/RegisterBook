@@ -52,7 +52,7 @@ void SQLiteDriver::open(std::string name){
 		}
 		//Buid the common statements
 		status = sqlite3_prepare_v2(db, "UPDATE transactions SET user_id=@label_user_id, title=@label_title, amount=@label_amount, transaction_time=@label_transaction_time, timestamp=@label_timestamp, comment=@label_comment WHERE transaction_id=@label_transaction_id;", -1, &updateTransactionStmt, NULL);
-		status = sqlite3_prepare_v2(db, "SELECT transaction_id FROM TRANSACTIONS WHERE transaction_id=@label_transaction_id", -1, &checkTransactionStmt, NULL);
+		status = sqlite3_prepare_v2(db, "SELECT transaction_id FROM TRANSACTIONS WHERE transaction_id=@label_transaction_id LIMIT 1;", -1, &checkTransactionStmt, NULL);
 	}
 }
 
