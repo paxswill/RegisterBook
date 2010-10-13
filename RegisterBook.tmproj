@@ -10,7 +10,7 @@
 			<key>filename</key>
 			<string>Makefile</string>
 			<key>lastUsed</key>
-			<date>2010-10-13T04:42:19Z</date>
+			<date>2010-10-13T08:31:23Z</date>
 			<key>selected</key>
 			<true/>
 		</dict>
@@ -34,37 +34,37 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>10</integer>
+				<integer>130</integer>
 				<key>line</key>
-				<integer>19</integer>
+				<integer>36</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
+			<integer>1</integer>
 		</dict>
 		<key>src/SQLiteDriver.cpp</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>1</integer>
+				<integer>47</integer>
 				<key>line</key>
-				<integer>121</integer>
+				<integer>207</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>124</integer>
+			<integer>0</integer>
 		</dict>
 		<key>src/SQLiteDriver.h</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>24</integer>
+				<integer>37</integer>
 				<key>line</key>
-				<integer>6</integer>
+				<integer>31</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -127,10 +127,25 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>src/test.cpp</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>10</integer>
+				<key>line</key>
+				<integer>13</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>0</integer>
+		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
 		<string>Makefile</string>
+		<string>src/test.cpp</string>
 		<string>src/SQLiteDriver.h</string>
 		<string>src/SQLiteDriver.cpp</string>
 		<string>src/Transaction.h</string>

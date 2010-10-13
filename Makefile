@@ -30,18 +30,24 @@ SYS_LDFLAGS = $(MINGW_LDFLAGS) $(OSX_LDFLAGS)
 
 #Compiler flags
 SELF_CFLAGS = -g -O0 -Wall $(CFLAGS)
+SELF_LDFLAGS =
 
-all: sqlite3 transaction sqlite
+all: sqlite3 transaction sqlite testing
+	#Link everything up
+	$(CXX) $(SELF_LDFLAGS) $(SYS_LDFLAGS) ./bin/test.o ./bin/sqlite3.o ./bin/Transaction.o ./bin/SQLiteDriver.o -o ./bin/RegisterBook
 
 clean:
 	rm -rf ./bin/*
+
+testing: transaction sqlite
+	$(CXX) $(SELF_CFLAGS) $(SYS_CFLAGS) -c -I./src/ ./src/test.cpp -o ./bin/test.o
 
 sqlite3:
 	$(CC) $(SELF_CFLAGS) $(SYS_CFLAGS) -c -I./sqlite3/ ./sqlite3/sqlite3.c -o ./bin/sqlite3.o
 
 transaction:
-	$(CXX) $(SELF_CFLAGS) $(SYS_CFLAGS) -c -I./src/ -I./sqlite3/ ./src/Transaction.cpp -o ./bin/Transaction.o
+	$(CXX) $(SELF_CFLAGS) $(SYS_CFLAGS) -c -I./src/ ./src/Transaction.cpp -o ./bin/Transaction.o
 
-sqlite:
+sqlite: sqlite3 transaction
 	$(CXX) $(SELF_CFLAGS) $(SYS_CFLAGS) -c -I./src/ -I./sqlite3/ ./src/SQLiteDriver.cpp -o ./bin/SQLiteDriver.o
 
