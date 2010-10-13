@@ -78,35 +78,27 @@ bool SQLiteDriver::saveTransaction(Transaction *t){
 	int status;
 	int parameterIndex;
 	sqlite3_stmt *workingStatment;
-	//Assume the transaction exists aleady -scratch that, check existence of the transaction ID-
+	//Check to see if the statement exists
+	workingStatment = checkTransactionStmt;
+	parameterIndex = sqlite3_bind_parameter_index(workingStatment, "label_transaction_id");
 	
 	//Bind the parameters
-	parameterIndex = sqlite3_bind_parameter_index(workingStatment, "label_user_id");
-	status = sqlite3_bind_int(workingStatment, parameterIndex, t->userID);
-	/*
-	Binding text is a PITA. from the third argument: 
-	C string
-	Size in bytes of the C string including null terminator
-	Special destructor value that says this value is transient, copy it before you use it.
-	*/
-	parameterIndex = sqlite3_bind_parameter_index(workingStatment, "label_title");
-	status = sqlite3_bind_text(workingStatment, parameterIndex, t->title.c_str(), (t->title.size() + 1) * sizeof(char), SQLITE_TRANSIENT);
-	parameterIndex = sqlite3_bind_parameter_index(workingStatment, "label_amount");
-	status = sqlite3_bind_double(workingStatment, parameterIndex, t->amount);
-	parameterIndex = sqlite3_bind_parameter_index(workingStatment, "label_transaction_time");
-	status = sqlite3_bind_int(workingStatment, parameterIndex, t->transactionStamp);
-	parameterIndex = sqlite3_bind_parameter_index(workingStatment, "label_timestamp");
-	status = sqlite3_bind_int(workingStatment, parameterIndex, (int)time(NULL));
-	parameterIndex = sqlite3_bind_parameter_index(workingStatment, "label_comment");
-	status = sqlite3_bind_text(workingStatment, parameterIndex, t->comment.c_str(), (t->comment.size() + 1) * sizeof(char), SQLITE_TRANSIENT);
-	parameterIndex = sqlite3_bind_parameter_index(workingStatment, "label_transaction_id");
-	status = sqlite3_bind_int(workingStatment, parameterIndex, t->transactionID);
+	status = bind(workingStatment, "label_user_id", t->userID);
+	status = bind(workingStatment, "label_title", t->title);
+	status = bind(workingStatment, "label_amount", t->amount);
+	status = bind(workingStatment, "label_transaction_time", (int)t->transactionStamp);
+	status = bind(workingStatment, "label_timestamp", (int)time(NULL));
+	status = bind(workingStatment, "label_comment", t->comment);
+	status = bind(workingStatment, "label_transaction_id", t->transactionID);
+	
 	//Binding done. Now to run the statement
 	do{
 		status = sqlite3_step(workingStatment);
 	}while(status != SQLITE_DONE);
 	//Reset the stement
 	status = sqlite3_reset(updateTransactionStmt);
+	//TODO: actually return meaningful data
+	return true;
 }
 
 Transaction* SQLiteDriver::makeTransaction(){
