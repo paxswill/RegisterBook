@@ -162,7 +162,15 @@ void SQLiteDriver::setTransaction(Transaction *t){
 
 int SQLiteDriver::countTransactions(){
 	//No need for a prepared statment here
-	
+	int status;
+	char **results, *errorMsg;
+	int rows, cols;
+	status = sqlite3_get_table(db, "SELECT COUNT(transaction_id) FROM transactions;", &results, &rows, &cols, &errorMsg);
+	//We should ust have 1 row and 1 column, we're just getting a number, but get the last element just in case
+	int numRecords = atoi(results[((rows + 1) * cols) - 1]);
+	//Free the results
+	sqlite3_free_table(results);
+	return numRecords;
 }
 
 //User Access
