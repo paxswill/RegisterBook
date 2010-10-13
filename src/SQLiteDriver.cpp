@@ -161,6 +161,7 @@ void SQLiteDriver::setTransaction(Transaction *t){
 }
 
 int SQLiteDriver::countTransactions(){
+	//No need for a prepared statment here
 	
 }
 
@@ -211,7 +212,7 @@ User* SQLiteDriver::getUser(int userID){
 
 /*
 	The bind() methods hide the SQLite3 C API for binding away.
-	The evils parts of it are the non-overloading (which we have in C++),
+	The evil parts of it are the non-overloading (which we have in C++),
 	not binding on placeholder names, and the obtuse way of binding strings.
 */
 int SQLiteDriver::bind(sqlite3_stmt *stmt, const char *var_name, int var){
@@ -226,7 +227,7 @@ int SQLiteDriver::bind(sqlite3_stmt *stmt, const char *var_name, double var){
 
 int SQLiteDriver::bind(sqlite3_stmt *stmt, const char *var_name, std::string var){
 	int parameterIndex = sqlite3_bind_parameter_index(stmt, var_name);
-	//There's some evil here, so here's an explanation
+	//There's some magic here, so here's an explanation
 	//Args 1 and 2 are simple enough, 3 is a C string, 4 is the size in bytes of the string,
 	// and 5 is a special value saying that the string passed may change in the future
 	// (which it does, std::string.c_str() returns an internal representation that changes)
