@@ -150,8 +150,6 @@ void SQLiteDriver::setTransaction(Transaction *t){
 	}while(status != SQLITE_DONE);
 	//Reset the stement
 	status = sqlite3_reset(updateTransactionStmt);
-	//TODO: actually return meaningful data
-	return true;
 }
 
 int SQLiteDriver::countTransactions(){
