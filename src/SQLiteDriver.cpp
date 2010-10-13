@@ -119,7 +119,14 @@ void SQLiteDriver::setTransaction(Transaction *t){
 	sqlite3_stmt *workingStatment;
 	//Check to see if the statement exists
 	workingStatment = checkTransactionStmt;
-	parameterIndex = sqlite3_bind_parameter_index(workingStatment, "label_transaction_id");
+	status = bind(workingStatment, "label_transaction_id", t->transactionID);
+	//Run the statement
+	do{
+		status = sqlite3_step(workingStatment);
+		if(!checkError(status)){
+			break;
+		}
+	}while(status != SQLITE_DONE);
 	
 	//Bind the parameters
 	status = bind(workingStatment, "label_user_id", t->userID);
@@ -133,6 +140,9 @@ void SQLiteDriver::setTransaction(Transaction *t){
 	//Binding done. Now to run the statement
 	do{
 		status = sqlite3_step(workingStatment);
+		if(!checkError(status)){
+			break;
+		}
 	}while(status != SQLITE_DONE);
 	//Reset the stement
 	status = sqlite3_reset(updateTransactionStmt);
